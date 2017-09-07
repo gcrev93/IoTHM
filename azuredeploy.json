@@ -1,0 +1,392 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "IotHubs_IoTHubMG_name": {
+            "defaultValue": "IoTHubMG",
+            "type": "String"
+        },
+        "workflows_IoTHubMG_name": {
+            "defaultValue": "IoTHubMG",
+            "type": "String"
+        },
+        "connections_servicebus_name": {
+            "defaultValue": "servicebus",
+            "type": "String"
+        },
+        "connections_azuretables_name": {
+            "defaultValue": "azuretables",
+            "type": "String"
+        },
+        "namespaces_IoTHubMG_name": {
+            "defaultValue": "IoTHubMG",
+            "type": "String"
+        },
+        "storageAccounts_iothubmg_name": {
+            "defaultValue": "iothubmg",
+            "type": "String"
+        },
+        "queues_iothubmg_name": {
+            "defaultValue": "iothubmg",
+            "type": "String"
+        },
+        "AuthorizationRules_RootManageSharedAccessKey_name": {
+            "defaultValue": "RootManageSharedAccessKey",
+            "type": "String"
+        },
+        "authorizationRules_iothubroutes_IoTHubMG_name": {
+            "defaultValue": "iothubroutes_IoTHubMG",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions",
+            "type": "Microsoft.Devices/IotHubs",
+            "sku": {
+                "name": "S1",
+                "tier": "Standard",
+                "capacity": 1
+            },
+            "name": "[parameters('IotHubs_IoTHubMG_name')]",
+            "apiVersion": "2016-02-03",
+            "location": "westcentralus",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "operationsMonitoringProperties": {
+                    "events": {
+                        "None": "None",
+                        "Connections": "None",
+                        "DeviceTelemetry": "None",
+                        "C2DCommands": "None",
+                        "DeviceIdentityOperations": "None",
+                        "FileUploadOperations": "None",
+                        "Routes": "None"
+                    }
+                },
+                "ipFilterRules": [],
+                "eventHubEndpoints": {
+                    "events": {
+                        "retentionTimeInDays": 1,
+                        "partitionCount": 4,
+                        "partitionIds": [
+                            "0",
+                            "1",
+                            "2",
+                            "3"
+                        ],
+                        "path": "[concat(parameters('IotHubs_IoTHubMG_name'),'iothubmg', parameters('IotHubs_IoTHubMG_name'))]",
+                        "endpoint": "[concat('sb://iothub-ns-iothubmg-214884-f8dff20e7c.servicebus.windows.net/')]"
+                    },
+                    "operationsMonitoringEvents": {
+                        "retentionTimeInDays": 1,
+                        "partitionCount": 4,
+                        "partitionIds": [
+                            "0",
+                            "1",
+                            "2",
+                            "3"
+                        ],
+                        "path": "[concat(parameters('IotHubs_IoTHubMG_name'),'iothubmg-operationmonitoring')]",
+                        "endpoint": "[concat('sb://iothub-ns-iothubmg-214884-f8dff20e7c.servicebus.windows.net/')]"
+                    }
+                },
+                "routing": {
+                    "endpoints": {
+                        "serviceBusQueues": [
+                            {
+                                "connectionString": "[concat('Endpoint=sb://iothubmg.servicebus.windows.net:5671/;SharedAccessKeyName=iothubroutes_', parameters('IotHubs_IoTHubMG_name'),';SharedAccessKey=****;EntityPath=iothubmg', parameters('IotHubs_IoTHubMG_name'))]",
+                                "name": "ServiceBus",
+                                "id": "70a1d861-9439-4bb7-848a-d8629215f75c",
+                                "subscriptionId": "77eb28d2-446e-4666-aee0-09073db270b1",
+                                "resourceGroup": "iothubmessages"
+                            }
+                        ],
+                        "serviceBusTopics": [],
+                        "eventHubs": []
+                    },
+                    "routes": [],
+                    "fallbackRoute": {
+                        "name": "$fallback",
+                        "source": "DeviceMessages",
+                        "condition": "true",
+                        "endpointNames": [
+                            "events"
+                        ],
+                        "isEnabled": true
+                    }
+                },
+                "storageEndpoints": {
+                    "$default": {
+                        "sasTtlAsIso8601": "PT1H",
+                        "connectionString": "",
+                        "containerName": ""
+                    }
+                },
+                "enableFileUploadNotifications": false,
+                "cloudToDevice": {
+                    "maxDeliveryCount": 10,
+                    "defaultTtlAsIso8601": "PT1H",
+                    "feedback": {
+                        "lockDurationAsIso8601": "PT1M",
+                        "ttlAsIso8601": "PT1H",
+                        "maxDeliveryCount": 10
+                    }
+                },
+                "features": "None"
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions",
+            "type": "Microsoft.Logic/workflows",
+            "name": "[parameters('workflows_IoTHubMG_name')]",
+            "apiVersion": "2016-06-01",
+            "location": "northcentralus",
+            "scale": null,
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "When_a_message_is_received_in_a_queue_(auto-complete)": {
+                            "recurrence": {
+                                "frequency": "Minute",
+                                "interval": 3
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['servicebus']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "[concat('/@{encodeURIComponent('iothubmg')}/messages/head')]",
+                                "queries": {
+                                    "queueType": "Main"
+                                }
+                            }
+                        }
+                    },
+                    "actions": {
+                        "Insert_Entity": {
+                            "runAfter": {
+                                "Parse_JSON": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "Message": "@{body('Parse_JSON')}",
+                                    "PartitionKey": "@{body('Parse_JSON')?['deviceId']}",
+                                    "RowKey": "@{body('Parse_JSON')?['time']}"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azuretables']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "[concat('/Tables/@{encodeURIComponent('', parameters('workflows_IoTHubMG_name'),'')}/entities')]"
+                            }
+                        },
+                        "Parse_JSON": {
+                            "runAfter": {},
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@base64ToString(triggerBody()?['ContentData'])",
+                                "schema": {
+                                    "properties": {
+                                        "deviceId": {
+                                            "type": "string"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "time": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "azuretables": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('connections_azuretables_name'))]",
+                                "connectionName": "azuretables",
+                                "id": "/subscriptions/77eb28d2-446e-4666-aee0-09073db270b1/providers/Microsoft.Web/locations/northcentralus/managedApis/azuretables"
+                            },
+                            "servicebus": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('connections_servicebus_name'))]",
+                                "connectionName": "servicebus",
+                                "id": "/subscriptions/77eb28d2-446e-4666-aee0-09073db270b1/providers/Microsoft.Web/locations/northcentralus/managedApis/servicebus"
+                            }
+                        }
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/connections', parameters('connections_azuretables_name'))]",
+                "[resourceId('Microsoft.Web/connections', parameters('connections_servicebus_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/",
+            "type": "Microsoft.ServiceBus/namespaces",
+            "sku": {
+                "name": "Standard",
+                "tier": "Standard",
+                "capacity": 1
+            },
+            "kind": "Messaging",
+            "name": "[parameters('namespaces_IoTHubMG_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "West Central US",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "status": "Active",
+                "createdAt": "2017-09-07T17:45:44.99Z",
+                "serviceBusEndpoint": "[concat('https://', parameters('namespaces_IoTHubMG_name'),'.servicebus.windows.net:443/')]",
+                "enabled": true,
+                "updatedAt": "2017-09-07T17:46:06.777Z"
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_iothubmg_name')]",
+            "apiVersion": "2016-01-01",
+            "location": "westcentralus",
+            "tags": {},
+            "scale": null,
+            "properties": {},
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/",
+            "type": "Microsoft.Web/connections",
+            "name": "[parameters('connections_azuretables_name')]",
+            "apiVersion": "2016-06-01",
+            "location": "northcentralus",
+            "scale": null,
+            "properties": {
+                "displayName": "IoTHubMG",
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('/subscriptions/77eb28d2-446e-4666-aee0-09073db270b1/providers/Microsoft.Web/locations/northcentralus/managedApis/', parameters('connections_azuretables_name'))]"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/",
+            "type": "Microsoft.Web/connections",
+            "name": "[parameters('connections_servicebus_name')]",
+            "apiVersion": "2016-06-01",
+            "location": "northcentralus",
+            "scale": null,
+            "properties": {
+                "displayName": "IoTHubMG",
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('/subscriptions/77eb28d2-446e-4666-aee0-09073db270b1/providers/Microsoft.Web/locations/northcentralus/managedApis/', parameters('connections_servicebus_name'))]"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions",
+            "type": "Microsoft.ServiceBus/namespaces/AuthorizationRules",
+            "name": "[concat(parameters('namespaces_IoTHubMG_name'), '/', parameters('AuthorizationRules_RootManageSharedAccessKey_name'))]",
+            "apiVersion": "2015-08-01",
+            "scale": null,
+            "properties": {
+                "rights": [
+                    "Listen",
+                    "Manage",
+                    "Send"
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_IoTHubMG_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/",
+            "type": "Microsoft.ServiceBus/namespaces/queues",
+            "name": "[concat(parameters('namespaces_IoTHubMG_name'), '/', parameters('queues_iothubmg_name'))]",
+            "apiVersion": "2015-08-01",
+            "location": "West Central US",
+            "scale": null,
+            "properties": {
+                "maxSizeInMegabytes": 16384,
+                "requiresDuplicateDetection": false,
+                "requiresSession": false,
+                "defaultMessageTimeToLive": "10675199.02:48:05.4775807",
+                "deadLetteringOnMessageExpiration": false,
+                "enableBatchedOperations": true,
+                "isAnonymousAccessible": false,
+                "status": "Active",
+                "createdAt": "2017-09-07T17:53:37.9881393Z",
+                "updatedAt": "2017-09-07T17:54:12.393384Z",
+                "accessedAt": "2017-09-07T18:05:48.3226752Z",
+                "supportOrdering": false,
+                "countDetails": {
+                    "activeMessageCount": 0,
+                    "deadLetterMessageCount": 0,
+                    "scheduledMessageCount": 0,
+                    "transferMessageCount": 0,
+                    "transferDeadLetterMessageCount": 0
+                },
+                "autoDeleteOnIdle": "10675199.02:48:05.4775807",
+                "enablePartitioning": true,
+                "enableExpress": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_IoTHubMG_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions",
+            "type": "Microsoft.ServiceBus/namespaces/queues/authorizationRules",
+            "name": "[concat(parameters('namespaces_IoTHubMG_name'), '/', parameters('queues_iothubmg_name'), '/', parameters('authorizationRules_iothubroutes_IoTHubMG_name'))]",
+            "apiVersion": "2015-08-01",
+            "location": "West Central US",
+            "scale": null,
+            "properties": {
+                "rights": [
+                    "Send"
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('namespaces_IoTHubMG_name'))]",
+                "[resourceId('Microsoft.ServiceBus/namespaces/queues', parameters('namespaces_IoTHubMG_name'), parameters('queues_iothubmg_name'))]"
+            ]
+        }
+    ]
+}
