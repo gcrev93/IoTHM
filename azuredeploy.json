@@ -3,31 +3,31 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "IotHubs_IoTHubMG_name": {
-            "defaultValue": "IoTHubMG",
+            "defaultValue": "<Insert IoT Hub Name here>",
             "type": "String"
         },
         "workflows_IoTHubMG_name": {
-            "defaultValue": "IoTHubMG",
+            "defaultValue": "<Insert IoTHub Connection Name here>",
             "type": "String"
         },
         "connections_servicebus_name": {
-            "defaultValue": "servicebus",
+            "defaultValue": "<Insert Service Bus Connection Name here>",
             "type": "String"
         },
         "connections_azuretables_name": {
-            "defaultValue": "azuretables",
+            "defaultValue": "<Insert Azure Table Connection Name here>",
             "type": "String"
         },
         "namespaces_IoTHubMG_name": {
-            "defaultValue": "IoTHubMG",
+            "defaultValue": "<Insert Custom Namespace here>",
             "type": "String"
         },
         "storageAccounts_iothubmg_name": {
-            "defaultValue": "iothubmg",
+            "defaultValue": "<Insert Storage Account Name here>",
             "type": "String"
         },
         "queues_iothubmg_name": {
-            "defaultValue": "iothubmg",
+            "defaultValue": "<Insert Service Bus Queue Name here>",
             "type": "String"
         },
         "AuthorizationRules_RootManageSharedAccessKey_name": {
