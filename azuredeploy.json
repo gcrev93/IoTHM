@@ -3,31 +3,31 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "IotHubs_IoTHubMG_name": {
-            "defaultValue": "<Insert IoT Hub Name here>",
+            "defaultValue": "IoTHubMG",
             "type": "String"
         },
         "workflows_IoTHubMG_name": {
-            "defaultValue": "<Insert IoTHub Connection Name here>",
+            "defaultValue": "IoTHubMG",
             "type": "String"
         },
         "connections_servicebus_name": {
-            "defaultValue": "<Insert Service Bus Connection Name here>",
+            "defaultValue": "servicebus",
             "type": "String"
         },
         "connections_azuretables_name": {
-            "defaultValue": "<Insert Azure Table Connection Name here>",
+            "defaultValue": "azuretables",
             "type": "String"
         },
         "namespaces_IoTHubMG_name": {
-            "defaultValue": "<Insert Custom Namespace here>",
+            "defaultValue": "IoTHubMG",
             "type": "String"
         },
         "storageAccounts_iothubmg_name": {
-            "defaultValue": "<Insert Storage Account Name here>",
+            "defaultValue": "iothubmg",
             "type": "String"
         },
         "queues_iothubmg_name": {
-            "defaultValue": "<Insert Service Bus Queue Name here>",
+            "defaultValue": "iothubmg",
             "type": "String"
         },
         "AuthorizationRules_RootManageSharedAccessKey_name": {
@@ -198,7 +198,7 @@
                                     }
                                 },
                                 "method": "post",
-                                "path": "[concat('/Tables/@{encodeURIComponent('', parameters(''workflows_IoTHubMG_name''),'')}/entities/')]"
+                                "path": "[concat('/Tables/@{encodeURIComponent(parameters(''workflows_IoTHubMG_name''))}/entities/')]"
                             }
                         },
                         "Parse_JSON": {
