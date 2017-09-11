@@ -198,7 +198,7 @@
                                     }
                                 },
                                 "method": "post",
-                                "path": "[concat('/Tables/@{encodeURIComponent('', parameters(''workflows_IoTHubMG_name''),'')}/entities')]"
+                                "path": "[concat('/Tables/@{encodeURIComponent('', parameters(''workflows_IoTHubMG_name''),'')}/entities/')]"
                             }
                         },
                         "Parse_JSON": {
