@@ -142,7 +142,7 @@
         {
             "comments": "Generalized from resource: '/subscriptions",
             "type": "Microsoft.Logic/workflows",
-            "name": "[parameters(''workflows_IoTHubMG_name'')]",
+            "name": "[parameters('workflows_IoTHubMG_name')]",
             "apiVersion": "2016-06-01",
             "location": "northcentralus",
             "scale": null,
