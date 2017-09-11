@@ -142,7 +142,7 @@
         {
             "comments": "Generalized from resource: '/subscriptions",
             "type": "Microsoft.Logic/workflows",
-            "name": "[parameters('workflows_IoTHubMG_name')]",
+            "name": "[parameters(''workflows_IoTHubMG_name'')]",
             "apiVersion": "2016-06-01",
             "location": "northcentralus",
             "scale": null,
@@ -344,7 +344,7 @@
             "location": "West Central US",
             "scale": null,
             "properties": {
-                "maxSizeInMegabytes": 16384,
+                "maxSizeInMegabytes": 5120,
                 "requiresDuplicateDetection": false,
                 "requiresSession": false,
                 "defaultMessageTimeToLive": "10675199.02:48:05.4775807",
