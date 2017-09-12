@@ -171,7 +171,7 @@
                                     }
                                 },
                                 "method": "get",
-                                "path": "[concat('/@{encodeURIComponent(''iothubmg'')}/messages/head', '')]",
+                                "path": "[concat('/@{encodeURIComponent(''queues_iothubmg_name'')}/messages/head', '')]",
                                 "queries": {
                                     "queueType": "Main"
                                 }
