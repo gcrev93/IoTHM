@@ -3,39 +3,30 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "IotHubs_IoTHubMG_name": {
-            "defaultValue": "IoTHubMG",
             "type": "String"
         },
         "workflows_IoTHubMG_name": {
-            "defaultValue": "IoTHubMG",
             "type": "String"
         },
         "connections_servicebus_name": {
-            "defaultValue": "servicebus",
             "type": "String"
         },
         "connections_azuretables_name": {
-            "defaultValue": "azuretables",
             "type": "String"
         },
         "namespaces_IoTHubMG_name": {
-            "defaultValue": "IoTHubMG",
             "type": "String"
         },
         "storageAccounts_iothubmg_name": {
-            "defaultValue": "iothubmg",
             "type": "String"
         },
         "queues_iothubmg_name": {
-            "defaultValue": "iothubmg",
             "type": "String"
         },
         "AuthorizationRules_RootManageSharedAccessKey_name": {
-            "defaultValue": "RootManageSharedAccessKey",
             "type": "String"
         },
         "authorizationRules_iothubroutes_IoTHubMG_name": {
-            "defaultValue": "iothubroutes_IoTHubMG",
             "type": "String"
         }
     },
