@@ -1,0 +1,3 @@
+Add: Low level infrastructure diagram -- architectural
+
+Do step by step ....
