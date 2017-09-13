@@ -9,9 +9,11 @@
             "type": "String"
         },
         "connections_servicebus_name": {
+            "defaultValue": "servicebus",
             "type": "String"
         },
         "connections_azuretables_name": {
+            "defaultValue": "azuretables",
             "type": "String"
         },
         "namespaces_IoTHubMG_name": {
@@ -24,9 +26,11 @@
             "type": "String"
         },
         "AuthorizationRules_RootManageSharedAccessKey_name": {
+            "defaultValue": "RootManageSharedAccessKey",
             "type": "String"
         },
         "authorizationRules_iothubroutes_IoTHubMG_name": {
+            "defaultValue": "iothubroutes_IoTHubname",
             "type": "String"
         }
     },
@@ -88,7 +92,7 @@
                     "endpoints": {
                         "serviceBusQueues": [
                             {
-                                "connectionString": "[concat('Endpoint=sb://iothubmg.servicebus.windows.net:5671/;SharedAccessKeyName=iothubroutes_', parameters('IotHubs_IoTHubMG_name'),';SharedAccessKey=****;EntityPath=iothubmg', parameters('IotHubs_IoTHubMG_name'))]",
+                                "connectionString": "[concat('Endpoint=sb://',parameters('IotHubs_IoTHubMG_name'),'.servicebus.windows.net:5671/;SharedAccessKeyName=iothubroutes_', parameters('IotHubs_IoTHubMG_name'),';SharedAccessKey=****;EntityPath=iothubmg', parameters('IotHubs_IoTHubMG_name'))]",
                                 "name": "ServiceBus",
                                 "id": "70a1d861-9439-4bb7-848a-d8629215f75c",
                                 "subscriptionId": "77eb28d2-446e-4666-aee0-09073db270b1",
@@ -221,13 +225,13 @@
                         "value": {
                             "azuretables": {
                                 "connectionId": "[resourceId('Microsoft.Web/connections', parameters('connections_azuretables_name'))]",
-                                "connectionName": "azuretables",
-                                "id": "/subscriptions/77eb28d2-446e-4666-aee0-09073db270b1/providers/Microsoft.Web/locations/northcentralus/managedApis/azuretables"
+                                "connectionName": "[parameters('connections_azuretables_name')]",
+                                "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuretables')]"
                             },
                             "servicebus": {
                                 "connectionId": "[resourceId('Microsoft.Web/connections', parameters('connections_servicebus_name'))]",
-                                "connectionName": "servicebus",
-                                "id": "/subscriptions/77eb28d2-446e-4666-aee0-09073db270b1/providers/Microsoft.Web/locations/northcentralus/managedApis/servicebus"
+                                "connectionName": "[parameters('connections_servicebus_name')]",
+                                "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/servicebus')]"
                             }
                         }
                     }
@@ -286,10 +290,10 @@
             "location": "northcentralus",
             "scale": null,
             "properties": {
-                "displayName": "IoTHubMG",
+                "displayName": "[parameters('connections_azuretables_name')]",
                 "customParameterValues": {},
                 "api": {
-                    "id": "[concat('/subscriptions/77eb28d2-446e-4666-aee0-09073db270b1/providers/Microsoft.Web/locations/northcentralus/managedApis/', parameters('connections_azuretables_name'))]"
+                    "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/',resourceGroup().location,'/managedApis/', parameters('connections_azuretables_name'))]"
                 }
             },
             "dependsOn": []
@@ -302,7 +306,7 @@
             "location": "northcentralus",
             "scale": null,
             "properties": {
-                "displayName": "IoTHubMG",
+                "displayName": "[parameters('connections_servicebus_name')]",
                 "customParameterValues": {},
                 "api": {
                     "id": "[concat('/subscriptions/77eb28d2-446e-4666-aee0-09073db270b1/providers/Microsoft.Web/locations/northcentralus/managedApis/', parameters('connections_servicebus_name'))]"
