@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1= title
+  br
+
+
+  table.table.table-striped.table-bordered
+    tr
+      td Device
+      td Date
+      td Message
+    each task in tasks
+      tr
+        td #{task.PartitionKey._}
+        - var zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        - var date = task.Timestamp._.toLocaleString({},{timeZone: zone});
+        td #{date}
+        - var payload = JSON.parse(task.Message._);
+        td #{payload.message}
+
